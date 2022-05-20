@@ -28,11 +28,6 @@ fs.readdir('./06-build-page/styles', {withFileTypes: true}, (err, files) => {
 
 
 function copyDir () {
-    fs.exists('./04-copy-directory/files-copy', (err) => {
-      if (err) {
-        
-      }
-    });
   
     fs.mkdir('./04-copy-directory/files-copy', { recursive: true }, (err) => {
       if (err) throw err;
