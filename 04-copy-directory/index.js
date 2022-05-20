@@ -2,11 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 function copyDir () {
-  fs.exists('./04-copy-directory/files-copy', (err) => {
-    if (err) {
-      
-    }
-  });
 
   fs.mkdir('./04-copy-directory/files-copy', { recursive: true }, (err) => {
     if (err) throw err;
