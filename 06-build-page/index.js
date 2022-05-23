@@ -1,16 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-/* ********************************** Создание папки project-dist **************************** */
-
 function mkDir (path) {
   fs.mkdir(path, { recursive: true }, (err) => {
     if (err) throw err;
   });
 }
 
-
-/* ********************************** Сборка стилей **************************** */
 function packStyle (readPath, writePath) {
   fs.readdir(readPath, {withFileTypes: true}, (err, files) => {
     if (err)
@@ -52,6 +48,39 @@ function copyFiles (pathDir, originPathFile) {
   });
 }
 
+function packTemplate () {
+
+  let data = '';
+  let nameFile = [];
+  const input = fs.createReadStream('./06-build-page/template.html', 'utf-8');
+  input.on('data', chunk => data += chunk);
+
+  fs.readdir('./06-build-page/components', {withFileTypes: true}, (err, files) => {
+    if (err)
+      console.log(err);
+    else {  
+      files.forEach(file => {
+        if (file.isFile()) {
+          let content = '';
+          let ext = file.name.split('.');
+          nameFile.push(ext[0]);
+          const input = fs.createReadStream(path.resolve('./06-build-page/components', file.name), 'utf-8');
+          const output = fs.createWriteStream('./06-build-page/project-dist/index.html');
+          input.on('data', chunk => content += chunk);
+          input.on('end', () => {
+            let array = data.split('');
+            let pos = data.indexOf(`{{${ext[0]}}}`);
+            array.splice(pos, ext[0].length + 4);
+            array.splice(pos, 0, content);
+            data = array.join('');
+            console.log(data);
+            output.write(data);
+          });
+        }
+      });}
+  });
+}
+
 
 mkDir ('./06-build-page/project-dist');
 mkDir ('./06-build-page/project-dist/assets');
@@ -62,3 +91,4 @@ packStyle ('./06-build-page/styles', './06-build-page/project-dist/style.css');
 copyFiles ('./06-build-page/project-dist/assets/fonts', './06-build-page/assets/fonts');
 copyFiles ('./06-build-page/project-dist/assets/img', './06-build-page/assets/img');
 copyFiles ('./06-build-page/project-dist/assets/svg', './06-build-page/assets/svg');
+packTemplate ();
