@@ -9,7 +9,7 @@ fs.readdir('./03-files-in-folder/secret-folder', {withFileTypes: true}, (err, fi
       if (file.isFile()) {
         let tochka = file.name.split('.');
         fs.stat(path.resolve('./03-files-in-folder/secret-folder', file.name), (err, stats) => {
-          let size = stats.size/1000;
+          let size = stats.size/1024;
           console.log(`${tochka[0]} - ${tochka[1]} - ${size}kb`);
         } );
       }

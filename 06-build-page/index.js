@@ -73,7 +73,6 @@ function packTemplate () {
             array.splice(pos, ext[0].length + 4);
             array.splice(pos, 0, content);
             data = array.join('');
-            console.log(data);
             output.write(data);
           });
         }
